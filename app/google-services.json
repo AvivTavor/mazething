@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "636682509293",
+    "project_id": "mazeit-5ca2d",
+    "storage_bucket": "mazeit-5ca2d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:636682509293:android:f1db05771f6ff4cc5de5e4",
+        "android_client_info": {
+          "package_name": "com.example.mazeit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "636682509293-s420bn39gjfjdvn3uokpql8ujb4uqn49.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcrMsH58qNRwvhS-6oQelrSWTYh3G8BwE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "636682509293-s420bn39gjfjdvn3uokpql8ujb4uqn49.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
