@@ -52,27 +52,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return c;
     }
-    Button mazetest;
-    Button online;
+    Button play;
+    Button recs;
+    ImageButton settings;
+    ImageButton share;
     SharedPreferences sp;
-    Button finalmaze;
-    Button showRecs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mazetest = findViewById(R.id.trything);
-        online = findViewById(R.id.online);
-        showRecs=findViewById(R.id.showRec);
-        sp=getSharedPreferences("scores",0);
-        mazetest.setOnClickListener(this);
-        online.setOnClickListener(this);
-        showRecs.setOnClickListener(this);
-        finalmaze = findViewById(R.id.finalmaze);
+        play = findViewById(R.id.finalmaze);
+        recs = findViewById(R.id.online);
 
-        finalmaze.setOnClickListener(this);
+        settings=findViewById(R.id.settings);
+        sp=getSharedPreferences("scores",0);
+        play.setOnClickListener(this);
+        recs.setOnClickListener(this);
+        settings.setOnClickListener(this);
+        share = findViewById(R.id.share);
+
+        share.setOnClickListener(this);
 
         SharedPreferences.Editor editor=sp.edit();
 
@@ -120,24 +121,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-        if(v==finalmaze){
+        if(v==play){
             Intent intent=new Intent(this,levelmenu.class);
 
             startActivity(intent);
         }
-        if(v==mazetest){
+        if(v==share){
             //Intent intent=new Intent(this,MazeTest.class);
 
             //startActivity(intent);
 
-            sendMessage("Hello dear friends! I just found this really cool game, it's called MazeIt. go check it out!");
+            sendMessage("Hello friends! I just found this really cool game, it's called MazeIt. go check it out!");
         }
-        if(v==online){
+        if(v==settings){
+            Toast.makeText(
+                    this,
+                    "setting menu doesn't exist yet",
+                    Toast.LENGTH_SHORT)
+                    .show();
+
             Intent intent=new Intent(this,testthing.class);
 
             startActivity(intent);
         }
-        if(v==showRecs){
+        if(v==recs){
             Intent intent=new Intent(this,RecList_activity.class);
 
             startActivity(intent);

@@ -1,5 +1,6 @@
 package com.example.mazeit;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -9,18 +10,52 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 public class MazeGame extends AppCompatActivity implements View.OnClickListener {
     TextView score;
+    public void uploadRecord(Record record, DatabaseReference Ref){
+        Ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                RecordList recL = null;
+                recL = snapshot.getValue(recL.getClass());
+                assert recL != null;
+                recL = recL.update(record);
+                Ref.setValue(recL);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+                Toast.makeText(
+                        MazeGame.this,
+                        "upload failed, please try again later.",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+        });
+    }
+
     TextView starsnum;
     Button publishRec;
     int curr;
+    String[] keys = {"-N2mbGLyLvWUTvF6b-DI","-N2mbGM4FBgBFIeg-hp-","-N2mbGM5GFwxXNH3wJI1","-N2mbGM6L3Y7hhQeVOth","-N2mbGM7KitQ6d1AZhMq","-N2mbGM8yoBClOw6SkEj","-N2mbGM9rEZ7__NZnWn9","-N2mbGMADsp21vMmCwbL","-N2mbGMB1NQfvbCfm1pj","-N2mbGMCCZgd14S0wkTx"};
     boolean active = false;
+
+    FirebaseDatabase firebaseDatabase;
+
     Button playagain;
     Button menu;
     TextView rec;
@@ -33,7 +68,6 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
     ImageButton down;
     ImageButton left;
     ImageButton right;
-
     ImageView iv;
     GameEx game = new GameEx(M,0,0,5);
     private void sendMessage(String massage)
@@ -95,6 +129,7 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        firebaseDatabase = FirebaseDatabase.getInstance("https://mazeit-5ca2d-default-rtdb.europe-west1.firebasedatabase.app/");
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_maze_game);
@@ -106,7 +141,6 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
         right = findViewById(R.id.right);
         sp=getSharedPreferences("scores",0);
 
-        curr = sp.getInt(""+game.getMaze().getsize(),100000000);
         right.setOnClickListener(this);
         up.setOnClickListener(this);
         down.setOnClickListener(this);
@@ -115,9 +149,12 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
         int k = getIntent().getExtras().getInt("size");
         iv = findViewById(R.id.iv);
         M= new Maze(k);
+
         M.RandomMaze();
         game = new GameEx(M,0,0,5);
         iv.setImageBitmap(M.DrawMaze());
+
+        curr = sp.getInt(""+game.getMaze().getsize(),100000000);
 
     }
 
@@ -138,7 +175,7 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
                 sendMessage("O M G!!!1!11! I just broke my record in MazeIt!!!! My new record on the " + M.getsize() + "x" + M.getsize() + " map is " + totext((long) game.getCentisecs()) + "!!! can YOU break it? I wanna see you try");
             }
             else{
-                sendMessage("Hi all! I just beat the "+M.getsize()+"x"+M.getsize()+"map in MazeIt in " +totext((long) game.getCentisecs())+"! check this game out.");
+                sendMessage("Hi all! I just beat the "+M.getsize()+"x"+M.getsize()+" map in MazeIt in " +totext((long) game.getCentisecs())+"! check this game out.");
             }
         }
         if(view == menu){
@@ -198,6 +235,7 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
         rec = (TextView) d.findViewById(R.id.newrec);
 
         rec.setText(""+curr);
+        uploadRecord(new Record(getIntent().getExtras().getInt("size"),2,sp.getString("name",""),sp.getString("userid","")),firebaseDatabase.getReference("record").child(keys[getIntent().getExtras().getInt("size")-1]));
 
 
         if (curr>game.getCentisecs()){

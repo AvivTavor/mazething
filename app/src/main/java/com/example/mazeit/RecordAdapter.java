@@ -7,6 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -14,6 +22,25 @@ public class RecordAdapter extends ArrayAdapter<Record> {
 
     Context context;
 
+
+    public static String totext(long n){
+        String s = "";
+        s=n%100+s;
+        if(n%100<10){
+            s= "0"+s;
+        }
+        n=n/100;
+        s=":"+s;
+        s=n%60+s;
+        if(n%60<10){
+            s= "0"+s;
+        }
+        n=n/60;
+        s=":"+s;
+        s=n+s;
+
+        return s;
+    }
     List<Record> objects;
     public RecordAdapter(Context context, int resource, int textViewResourceId, List<Record> objects) {
         super(context, resource, textViewResourceId, objects);
@@ -34,7 +61,7 @@ public class RecordAdapter extends ArrayAdapter<Record> {
         Record temp = objects.get(position);
 
         name.setText(temp.nickname);
-        time.setText(String.valueOf(temp.time));
+        time.setText(totext(temp.time));
 
         return view;
     }

@@ -9,9 +9,9 @@
         android:id="@+id/time"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_weight="70"
+        android:layout_weight="60"
         android:gravity="center"
-        android:text="14.234"
+        android:text="00:00:00"
         android:textAlignment="center"
         android:textSize="40sp" />
 
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:textSize="30sp"
-        android:layout_weight="30"
+        android:layout_weight="40"
         android:gravity="center"
         android:textAlignment="center"
         android:text="Guestasdfghjkl;"

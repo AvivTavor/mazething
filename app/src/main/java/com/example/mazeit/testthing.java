@@ -34,6 +34,24 @@ public class testthing extends AppCompatActivity implements View.OnClickListener
     RecordList recL = new RecordList();
     RecordList examplerec = new RecordList(new Record());
 
+    public static String totext(long n){
+        String s = "";
+        s=n%100+s;
+        if(n%100<10){
+            s= "0"+s;
+        }
+        n=n/100;
+        s=":"+s;
+        s=n%60+s;
+        if(n%60<10){
+            s= "0"+s;
+        }
+        n=n/60;
+        s=":"+s;
+        s=n+s;
+
+        return s;
+    }
     RecordList[] recLists = new RecordList[10];
     public String emptiness(RecordList r){
         if(r==null){
@@ -55,23 +73,12 @@ public class testthing extends AppCompatActivity implements View.OnClickListener
         code = findViewById(R.id.code);
         create = findViewById(R.id.create);
 
-        Record r1= new Record(6,1600,"aviv","asdfghjk");
-        Record r2= new Record(6,1620,"moshe","asdfgsdafhjk");
-        Record r3= new Record(6,1630,"danny","asdfgewrghjk");
-        Record r4= new Record(6,1640,"noa","asdfghjdfhk");
-        Record r5= new Record(6,1650,"noga","asdfgthhjk");
-        Record r6= new Record(6,1660,"aviv2","asdf4hdgghjk");
-        Record r7= new Record(6,1670,"aviv5","asdfbfergghjk");
-        Record r8= new Record(6,1680,"shlomi","asdverjfghjk");
-        Record r9= new Record(6,1690,"ori","asdf6yjghjk");
-        RecordList testlist = new RecordList(r1,new RecordList(r2,new RecordList(r3,new RecordList(r4,new RecordList(r5,new RecordList(r6,new RecordList(r7,new RecordList(r8,new RecordList(r9)))))))));
 
         create.setOnClickListener(this);
         showkey = findViewById(R.id.showthingy);
         showkey.setText(sp.getString("userid",""));
         firebaseDatabase = FirebaseDatabase.getInstance("https://mazeit-5ca2d-default-rtdb.europe-west1.firebasedatabase.app/");
-        gameRef=firebaseDatabase.getReference("record").child(keys[0]);
-        gameRef.setValue(testlist);
+
     }
 
     @Override
@@ -80,7 +87,14 @@ public class testthing extends AppCompatActivity implements View.OnClickListener
             int size = Integer.parseInt(String.valueOf(code.getText()));
             int value = Integer.parseInt(String.valueOf(pass.getText()));
             gameRef=firebaseDatabase.getReference("record").child(keys[size-1]);
+
             Record r = new Record(size,value,sp.getString("name",""),sp.getString("userid",""));
+            Record r3= new Record(size,sp.getInt("3star"+size,0),"3 star","");
+            Record r2= new Record(size,sp.getInt("2star"+size,0),"2 star","");
+            Record r1= new Record(size,sp.getInt("1star"+size,0),"1 star","");
+
+
+            RecordList testlist = new RecordList(r1,new RecordList(r2,new RecordList(r3)));
 
             gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -88,8 +102,8 @@ public class testthing extends AppCompatActivity implements View.OnClickListener
                     showkey.setText("function succeeded");
                     recL = snapshot.getValue(recL.getClass());
                     assert recL != null;
-                    recL = recL.update(r);
-                    gameRef.setValue(recL);
+                    //recL = recL.update(r);
+                    gameRef.setValue(testlist);
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {

@@ -141,8 +141,12 @@ public class RecordList {
     }
     public RecordList update(Record r){
         RecordList p = this;
+
+        Log.d("GOTHERE", "line 146");
         p= p.deleteRecord(r);
+
         p = p.addRecord(r);
+
         return p;
     }
     public RecordList deleteRecord(Record r){
@@ -150,6 +154,7 @@ public class RecordList {
         if(p.getNext()==null){
             if(p.value.code.equals(r.code)){
                 return null;
+
             }
             else{
                 return p;

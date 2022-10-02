@@ -1,13 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RecList_activity">
+    tools:context=".RecList_activity"
+    android:gravity="left"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        android:gravity="center"
+        >
 
+        <Button
+            android:id="@+id/buttonR3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:text="3x3"
+            />
+
+        <Button
+            android:id="@+id/buttonR4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:text="4x4" />
+
+        <Button
+            android:id="@+id/buttonR5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:text="5x5" />
+
+        <Button
+            android:id="@+id/buttonR6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:text="6x6" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        android:gravity="center"
+        >
+
+        <Button
+            android:id="@+id/buttonR7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:text="7x7"
+            />
+
+        <Button
+            android:id="@+id/buttonR8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:text="8x8" />
+
+        <Button
+            android:id="@+id/buttonR9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:text="9x9" />
+
+        <Button
+            android:id="@+id/buttonR10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:text="10x10" />
+    </LinearLayout>
     <ListView
         android:id="@+id/recList"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-</RelativeLayout>
+</LinearLayout>
