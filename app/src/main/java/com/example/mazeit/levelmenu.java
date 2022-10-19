@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,9 +28,21 @@ public class levelmenu extends AppCompatActivity implements View.OnClickListener
     TextView star3;
     TextView usertime;
     Button playbtn;
+    MediaPlayer mediaPlayer;
+    MediaPlayer gotolevel;
+    MediaPlayer bpress;
 
     int k=0;
+    public void onBackPressed() {
+        mediaPlayer.stop();
+        Intent intent=new Intent(this,MainActivity.class);
+        startActivity(intent);
+    }
     public static String totext(long n){
+        if(n==999999999){
+            return "no time yet";
+        }
+        else{
         String s = "";
         s=n%100+s;
         if(n%100<10){
@@ -44,15 +58,25 @@ public class levelmenu extends AppCompatActivity implements View.OnClickListener
         s=":"+s;
         s=n+s;
 
-        return s;
+        return s;}
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_levelmenu);
+
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.levelmenumusic);
+        bpress = MediaPlayer.create(getApplicationContext(), R.raw.blop);
+        gotolevel = MediaPlayer.create(getApplicationContext(), R.raw.gamestart);        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
         sp=getSharedPreferences("scores",0);
+        mediaPlayer.setVolume((float)sp.getInt("musicvol",10)/10,(float)sp.getInt("musicvol",10)/10);
+        bpress.setVolume((float)sp.getInt("sfxvol",10)/10,(float)sp.getInt("sfxvol",10)/10);
+        gotolevel.setVolume((float)sp.getInt("sfxvol",10)/10,(float)sp.getInt("sfxvol",10)/10);
         int s=0;
-        for(int i=3;i<=10;i++){
+        for(int i=3;i<=10;                i++){
             s+=sp.getInt("star"+i,0);
         }
 
@@ -88,12 +112,15 @@ public class levelmenu extends AppCompatActivity implements View.OnClickListener
     public void onClick(View v) {
 
         if (v ==playbtn&&k!=0){
+            gotolevel.start();
+            mediaPlayer.stop();
             Intent intent=new Intent(this,MazeGame.class);
             intent.putExtra("size",k);
             startActivity(intent);
         }
         else{
             if(v==btn3){
+                bpress.start();
                 k=3;/*
                 btn3.setBackgroundColor(android.R.color.holo_green_light);
                 btn4.setBackgroundColor(android.R.color.holo_purple);
@@ -105,6 +132,8 @@ public class levelmenu extends AppCompatActivity implements View.OnClickListener
                 btn10.setBackgroundColor(android.R.color.holo_purple);*/
             }
             if(v==btn4){
+
+                bpress.start();
                 k=4;
                 /*
                 btn4.setBackgroundColor(123);
@@ -117,6 +146,8 @@ public class levelmenu extends AppCompatActivity implements View.OnClickListener
                 btn10.setBackgroundColor(200);*/
             }
             if(v==btn5){
+
+                bpress.start();
                 k=5;
                 /*
                 btn5.setBackgroundColor(123);
@@ -129,6 +160,8 @@ public class levelmenu extends AppCompatActivity implements View.OnClickListener
                 btn10.setBackgroundColor(200);*/
             }
             if(v==btn6){
+
+                bpress.start();
                 k=6;
                 /*
                 btn6.setBackgroundColor(123);
@@ -141,6 +174,8 @@ public class levelmenu extends AppCompatActivity implements View.OnClickListener
                 btn10.setBackgroundColor(200);*/
             }
             if(v==btn7){
+
+                bpress.start();
                 k=7;
                 /*
                 btn7.setBackgroundColor(123);
@@ -153,6 +188,8 @@ public class levelmenu extends AppCompatActivity implements View.OnClickListener
                 btn10.setBackgroundColor(200);*/
             }
             if(v==btn8){
+
+                bpress.start();
                 k=8;
                 /*
                 btn8.setBackgroundColor(123);
@@ -165,6 +202,8 @@ public class levelmenu extends AppCompatActivity implements View.OnClickListener
                 btn10.setBackgroundColor(200);*/
             }
             if(v==btn9) {
+
+                bpress.start();
                 k = 9;
                 /*
                 btn9.setBackgroundColor(123);
@@ -177,6 +216,8 @@ public class levelmenu extends AppCompatActivity implements View.OnClickListener
                 btn10.setBackgroundColor(200);*/
             }
             if(v==btn10){
+
+                bpress.start();
                 k=10;
                 /*
                 btn10.setBackgroundColor(123);

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,6 +35,29 @@ public class testthing extends AppCompatActivity implements View.OnClickListener
     RecordList recL = new RecordList();
     RecordList examplerec = new RecordList(new Record());
 
+
+    public void uploadRecord(Record record, DatabaseReference Ref){
+        Ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                RecordList recL = new RecordList();
+                recL = snapshot.getValue(recL.getClass());
+                assert recL != null;
+                recL = recL.update(record);
+                Ref.setValue(recL);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+                Toast.makeText(
+                        testthing.this,
+                        "upload failed, please try again later.",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+        });
+    }
     public static String totext(long n){
         String s = "";
         s=n%100+s;
@@ -89,9 +113,11 @@ public class testthing extends AppCompatActivity implements View.OnClickListener
             gameRef=firebaseDatabase.getReference("record").child(keys[size-1]);
 
             Record r = new Record(size,value,sp.getString("name",""),sp.getString("userid",""));
-            Record r3= new Record(size,sp.getInt("3star"+size,0),"3 star","");
+            Record r1= new Record(size,sp.getInt("3star"+size,0),"3 star","");
             Record r2= new Record(size,sp.getInt("2star"+size,0),"2 star","");
-            Record r1= new Record(size,sp.getInt("1star"+size,0),"1 star","");
+            Record r3= new Record(size,sp.getInt("1star"+size,0),"1 star","");
+
+            Record r4= new Record(size,sp.getInt("1star"+size,0),"star","123");
 
 
             RecordList testlist = new RecordList(r1,new RecordList(r2,new RecordList(r3)));
@@ -99,18 +125,36 @@ public class testthing extends AppCompatActivity implements View.OnClickListener
             gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    showkey.setText("function succeeded");
+                    RecordList recL = new RecordList();
                     recL = snapshot.getValue(recL.getClass());
                     assert recL != null;
-                    //recL = recL.update(r);
                     gameRef.setValue(testlist);
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                    Toast.makeText(
+                            testthing.this,
+                            "upload failed, please try again later.",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+            });/*
+
+            gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    recL = snapshot.getValue(recL.getClass());
+                    assert recL != null;
+                    recL = recL.update(r);
+                    gameRef.setValue(recL);
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     showkey.setText("function failed");
                 }
 
-            });
+            });*/
         }
     }
 }

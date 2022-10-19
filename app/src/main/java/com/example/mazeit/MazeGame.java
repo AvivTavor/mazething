@@ -7,6 +7,8 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -25,11 +27,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 public class MazeGame extends AppCompatActivity implements View.OnClickListener {
     TextView score;
+
+    @Override
+    public void onBackPressed() {
+        mpmusic.stop();
+        Intent intent=new Intent(this,levelmenu.class);
+        startActivity(intent);
+    }
     public void uploadRecord(Record record, DatabaseReference Ref){
         Ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                RecordList recL = null;
+                RecordList recL = new RecordList();
                 recL = snapshot.getValue(recL.getClass());
                 assert recL != null;
                 recL = recL.update(record);
@@ -70,6 +79,10 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
     ImageButton right;
     ImageView iv;
     GameEx game = new GameEx(M,0,0,5);
+    MediaPlayer mpmusic;
+    MediaPlayer mpclap;
+    MediaPlayer bpress;
+    MediaPlayer nextmaze;
     private void sendMessage(String massage)
     {
 
@@ -133,6 +146,18 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_maze_game);
+
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        bpress = MediaPlayer.create(getApplicationContext(), R.raw.blop);
+
+        mpmusic = MediaPlayer.create(getApplicationContext(), R.raw.main);
+        mpmusic.setLooping(true);
+
+        nextmaze = MediaPlayer.create(getApplicationContext(), R.raw.nextmaze);
+        mpmusic.start();
+        mpclap = MediaPlayer.create(getApplicationContext(), R.raw.claps);
+
         rec = findViewById(R.id.newrec);
         timer = findViewById(R.id.time);
         up = findViewById(R.id.up);
@@ -140,6 +165,12 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
         left = findViewById(R.id.left);
         right = findViewById(R.id.right);
         sp=getSharedPreferences("scores",0);
+
+        mpmusic.setVolume((float)sp.getInt("musicvol",10)/10,(float)sp.getInt("musicvol",10)/10);
+        bpress.setVolume((float)sp.getInt("sfxvol",10)/10,(float)sp.getInt("sfxvol",10)/10);
+        mpclap.setVolume((float)sp.getInt("sfxvol",10)/10,(float)sp.getInt("sfxvol",10)/10);
+        nextmaze.setVolume((float)sp.getInt("sfxvol",10)/10,(float)sp.getInt("sfxvol",10)/10);
+
 
         right.setOnClickListener(this);
         up.setOnClickListener(this);
@@ -166,6 +197,8 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
             timerHandler.postDelayed(timerRunnable, 10);
         }
         if(view == playagain){
+
+            mpmusic.stop();
             Intent intent=new Intent(this,MazeGame.class);
             intent.putExtra("size",game.getMaze().getsize());
             startActivity(intent);
@@ -179,34 +212,52 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
             }
         }
         if(view == menu){
+
+            mpmusic.stop();
             Intent intent=new Intent(this,MainActivity.class);
             startActivity(intent);
         }
         if (game.getDestination() > game.getScore()) {
             if (view == right) {
+                if(game.getMaze().canright()){
+                    bpress.start();
+                }
                 game.tryright();
                 if (game.getMaze().solved()) {
+                    nextmaze.start();
                     game.getMaze().RandomMaze();
                     game.setScore(game.getScore() + 1);
                 }
             }
             if (view == left) {
+                if(game.getMaze().canleft()){
+                    bpress.start();
+                }
                 game.tryleft();
                 if (game.getMaze().solved()) {
+                    nextmaze.start();
                     game.getMaze().RandomMaze();
                     game.setScore(game.getScore() + 1);
                 }
             }
             if (view == up) {
+                if(game.getMaze().canup()){
+                    bpress.start();
+                }
                 game.tryup();
                 if (game.getMaze().solved()) {
+                    nextmaze.start();
                     game.getMaze().RandomMaze();
                     game.setScore(game.getScore() + 1);
                 }
             }
             if (view == down) {
+                if(game.getMaze().candown()){
+                    bpress.start();
+                }
                 game.trydown();
                 if (game.getMaze().solved()) {
+                    nextmaze.start();
                     game.getMaze().RandomMaze();
                     game.setScore(game.getScore() + 1);
                 }
@@ -218,7 +269,8 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
     @SuppressLint("SetTextI18n")
     public void openDialogue(){
         d= new Dialog(this);
-
+        mpmusic.stop();
+        mpclap.start();
         d.setContentView(R.layout.showscore_dialog);
         d.setTitle("score");
         d.setCancelable(false);
@@ -235,7 +287,7 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
         rec = (TextView) d.findViewById(R.id.newrec);
 
         rec.setText(""+curr);
-        uploadRecord(new Record(getIntent().getExtras().getInt("size"),2,sp.getString("name",""),sp.getString("userid","")),firebaseDatabase.getReference("record").child(keys[getIntent().getExtras().getInt("size")-1]));
+
 
 
         if (curr>game.getCentisecs()){
@@ -259,6 +311,7 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
         else{
             rec.setText("best: "+totext((long)curr));
         }
+        uploadRecord(new Record(getIntent().getExtras().getInt("size"),sp.getInt(""+getIntent().getExtras().getInt("size"),0),sp.getString("name",""),sp.getString("userid","")),firebaseDatabase.getReference("record").child(keys[getIntent().getExtras().getInt("size")-1]));
         //int b = sp.getInt("star"+game.getMaze().getsize(),0);
         int p =0;
         SharedPreferences.Editor editor=sp.edit();

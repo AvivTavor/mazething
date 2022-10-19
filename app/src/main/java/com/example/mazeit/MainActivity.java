@@ -5,10 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +28,17 @@ import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    public void onBackPressed() {
+    }
+    public boolean internetIsConnected() {
+        try {
+            String command = "ping -c 1 google.com";
+            return (Runtime.getRuntime().exec(command).waitFor() == 0);
+        } catch (Exception e) {
+            return false;
+        }
+    }
     private void sendMessage(String massage)
     {
 
@@ -57,17 +72,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageButton settings;
     ImageButton share;
     SharedPreferences sp;
+    MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        // Audiofile in raw folder
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.mainmenu);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
 
         play = findViewById(R.id.finalmaze);
         recs = findViewById(R.id.online);
 
         settings=findViewById(R.id.settings);
         sp=getSharedPreferences("scores",0);
+
+        mediaPlayer.setVolume((float)sp.getInt("musicvol",10)/10,(float)sp.getInt("musicvol",10)/10);
+
         play.setOnClickListener(this);
         recs.setOnClickListener(this);
         settings.setOnClickListener(this);
@@ -88,6 +112,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editor.putBoolean("need8",false);
             editor.putBoolean("need9",false);
             editor.putBoolean("need10",false);
+
+            editor.putInt("3",999999999);
+
+            editor.putInt("4",999999999);
+
+            editor.putInt("5",999999999);
+
+            editor.putInt("6",999999999);
+
+            editor.putInt("7",999999999);
+
+            editor.putInt("8",999999999);
+
+            editor.putInt("9",999999999);
+
+            editor.putInt("10",999999999);
+
+            editor.putString("name","Guest");
+
         }
         editor.putBoolean("coded",true);
         editor.putInt("1star3",1200);
@@ -114,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editor.putInt("3star8",2550);
         editor.putInt("3star9",2900);
         editor.putInt("3star10",3350);
+
         editor.commit();
 
     }
@@ -122,9 +166,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
 
         if(v==play){
+
+            mediaPlayer.stop();
             Intent intent=new Intent(this,levelmenu.class);
 
             startActivity(intent);
+
         }
         if(v==share){
             //Intent intent=new Intent(this,MazeTest.class);
@@ -134,20 +181,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             sendMessage("Hello friends! I just found this really cool game, it's called MazeIt. go check it out!");
         }
         if(v==settings){
-            Toast.makeText(
-                    this,
-                    "setting menu doesn't exist yet",
-                    Toast.LENGTH_SHORT)
-                    .show();
 
-            Intent intent=new Intent(this,testthing.class);
+            mediaPlayer.stop();
+            Intent intent=new Intent(this,settingpage.class);
 
             startActivity(intent);
         }
         if(v==recs){
+
+            mediaPlayer.stop();
+            if(internetIsConnected()){
             Intent intent=new Intent(this,RecList_activity.class);
 
-            startActivity(intent);
+            startActivity(intent);}
+            else{
+
+                Toast.makeText(
+                        this,
+                        "Please check your internet connection",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
         }
 
     }

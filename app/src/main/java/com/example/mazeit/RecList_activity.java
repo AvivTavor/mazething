@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -49,6 +52,12 @@ public class RecList_activity extends AppCompatActivity implements View.OnClickL
     DatabaseReference Ref9;
     DatabaseReference Ref10;
     FirebaseDatabase firebaseDatabase;
+    MediaPlayer bpress;
+
+    public void onBackPressed() {
+        Intent intent=new Intent(this,MainActivity.class);
+        startActivity(intent);
+    }
     public void showRecords(DatabaseReference R){
         R.addListenerForSingleValueEvent(new ValueEventListener() {
         @Override
@@ -69,6 +78,9 @@ public class RecList_activity extends AppCompatActivity implements View.OnClickL
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rec_list);
+
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        bpress = MediaPlayer.create(getApplicationContext(),R.raw.blop);
 
         sp=getSharedPreferences("scores",0);
         bt3 = findViewById(R.id.buttonR3);
@@ -125,18 +137,21 @@ public class RecList_activity extends AppCompatActivity implements View.OnClickL
         }
 
         if(view == bt4){
-            showRecords(Ref4);}
+            showRecords(Ref4);
+            bpress.start();}
+
         if(view == bt5){
-            showRecords(Ref5);}
+            showRecords(Ref5);
+            bpress.start();}
         if(view == bt6){
-            showRecords(Ref6);}
+            showRecords(Ref6);bpress.start();}
         if(view == bt7){
-            showRecords(Ref7);}
+            showRecords(Ref7);bpress.start();}
         if(view == bt8){
-            showRecords(Ref8);}
+            showRecords(Ref8);bpress.start();}
         if(view == bt9){
-            showRecords(Ref9);}
+            showRecords(Ref9);bpress.start();}
         if(view == bt10){
-            showRecords(Ref10);}
+            showRecords(Ref10);bpress.start();}
     }
 }

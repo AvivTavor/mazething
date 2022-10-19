@@ -5,10 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MazeGame"
+    android:screenOrientation="portrait"
+    android:background = "#000000"
     >
 
     <TextView
         android:id="@+id/time"
+        android:textColor= "#FFFFFF"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="0:00:00"
@@ -30,7 +33,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.68" />
+        app:layout_constraintVertical_bias="0.7" />
 
     <ImageButton
         android:id="@+id/down"
@@ -42,7 +45,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.940" />
+        app:layout_constraintVertical_bias="0.960" />
 
     <ImageButton
         android:id="@+id/right"
@@ -50,11 +53,11 @@
         android:layout_height="80dp"
         android:background="@drawable/img"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.737"
+        app:layout_constraintHorizontal_bias="0.747"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.810" />
+        app:layout_constraintVertical_bias="0.830" />
 
     <ImageButton
         android:id="@+id/left"
@@ -62,11 +65,11 @@
         android:layout_height="80dp"
         android:background="@drawable/img"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.259"
+        app:layout_constraintHorizontal_bias="0.249"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.810" />
+        app:layout_constraintVertical_bias="0.830" />
 
     <ImageView
         android:id="@+id/iv"
