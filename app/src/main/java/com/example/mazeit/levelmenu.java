@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class levelmenu extends AppCompatActivity implements View.OnClickListener {
@@ -31,10 +32,22 @@ public class levelmenu extends AppCompatActivity implements View.OnClickListener
     MediaPlayer mediaPlayer;
     MediaPlayer gotolevel;
     MediaPlayer bpress;
+    ImageButton backbutton;
 
     int k=0;
+    public void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Play again
+        mediaPlayer.start();
+        //do more stuff
+    }
     public void onBackPressed() {
-        mediaPlayer.stop();
+        mediaPlayer.pause();
         Intent intent=new Intent(this,MainActivity.class);
         startActivity(intent);
     }
@@ -66,7 +79,8 @@ public class levelmenu extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_levelmenu);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+        backbutton = findViewById(R.id.backbutton);
+        backbutton.setOnClickListener(this);
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.levelmenumusic);
         bpress = MediaPlayer.create(getApplicationContext(), R.raw.blop);
         gotolevel = MediaPlayer.create(getApplicationContext(), R.raw.gamestart);        mediaPlayer.setLooping(true);
@@ -235,6 +249,9 @@ public class levelmenu extends AppCompatActivity implements View.OnClickListener
             star3.setText(totext(sp.getInt("3star"+k,0)));
             usertime.setText(totext(sp.getInt(""+k,0)));
             playbtn.setClickable(true);
+        }
+        if(v==backbutton){
+            onBackPressed();
         }
     }
 }

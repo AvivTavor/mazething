@@ -2,12 +2,14 @@ package com.example.mazeit;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +30,51 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 public class MazeGame extends AppCompatActivity implements View.OnClickListener {
     TextView score;
-
+    public int tocolor(String s) {
+        if (s.equals("green")) {
+            return Color.GREEN;
+        }
+        if (s.equals("blue")) {
+            return Color.BLUE;
+        }
+        if (s.equals("red")) {
+            return Color.RED;
+        }
+        if (s.equals("black")) {
+            return Color.BLACK;
+        }
+        if (s.equals("white")) {
+            return Color.WHITE;
+        }
+        if (s.equals("dark gray")) {
+            return Color.DKGRAY;
+        }
+        if (s.equals("yellow")) {
+            return Color.YELLOW;
+        }
+        if (s.equals("cyan")) {
+            return Color.CYAN;
+        } if (s.equals("magenta")) {
+            return Color.MAGENTA;
+        }
+        if (s.equals("light gray")) {
+            return Color.LTGRAY;
+        }
+        else{
+            return 0;
+        }
+    }
+    public void onPause() {
+        super.onPause();
+        mpmusic.pause();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Play again
+        mpmusic.start();
+        //do more stuff
+    }
     @Override
     public void onBackPressed() {
         mpmusic.stop();
@@ -59,6 +106,7 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
 
     TextView starsnum;
     Button publishRec;
+    ImageButton backbutton;
     int curr;
     String[] keys = {"-N2mbGLyLvWUTvF6b-DI","-N2mbGM4FBgBFIeg-hp-","-N2mbGM5GFwxXNH3wJI1","-N2mbGM6L3Y7hhQeVOth","-N2mbGM7KitQ6d1AZhMq","-N2mbGM8yoBClOw6SkEj","-N2mbGM9rEZ7__NZnWn9","-N2mbGMADsp21vMmCwbL","-N2mbGMB1NQfvbCfm1pj","-N2mbGMCCZgd14S0wkTx"};
     boolean active = false;
@@ -83,6 +131,7 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
     MediaPlayer mpclap;
     MediaPlayer bpress;
     MediaPlayer nextmaze;
+    ImageButton restart;
     private void sendMessage(String massage)
     {
 
@@ -139,33 +188,41 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
 
         }
     };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         firebaseDatabase = FirebaseDatabase.getInstance("https://mazeit-5ca2d-default-rtdb.europe-west1.firebasedatabase.app/");
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_maze_game);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+        final ConstraintLayout Clayout;
+        Clayout = findViewById(R.id.thescreen);
         bpress = MediaPlayer.create(getApplicationContext(), R.raw.blop);
 
         mpmusic = MediaPlayer.create(getApplicationContext(), R.raw.main);
         mpmusic.setLooping(true);
+        restart = findViewById(R.id.restart);
+        restart.setOnClickListener(this);
 
         nextmaze = MediaPlayer.create(getApplicationContext(), R.raw.nextmaze);
         mpmusic.start();
         mpclap = MediaPlayer.create(getApplicationContext(), R.raw.claps);
-
         rec = findViewById(R.id.newrec);
         timer = findViewById(R.id.time);
         up = findViewById(R.id.up);
         down = findViewById(R.id.down);
         left = findViewById(R.id.left);
         right = findViewById(R.id.right);
+        backbutton = findViewById(R.id.back);
+        backbutton.setOnClickListener(this);
         sp=getSharedPreferences("scores",0);
-
+        Clayout.setBackgroundColor(sp.getInt("backgroundcolor",Color.BLACK));
+        if(sp.getInt("backgroundcolor",Color.BLACK)==Color.BLACK||sp.getInt("backgroundcolor",Color.BLACK)==Color.DKGRAY){
+            timer.setTextColor(Color.WHITE);
+        }
+        else{
+            timer.setTextColor(Color.BLACK);
+        }
         mpmusic.setVolume((float)sp.getInt("musicvol",10)/10,(float)sp.getInt("musicvol",10)/10);
         bpress.setVolume((float)sp.getInt("sfxvol",10)/10,(float)sp.getInt("sfxvol",10)/10);
         mpclap.setVolume((float)sp.getInt("sfxvol",10)/10,(float)sp.getInt("sfxvol",10)/10);
@@ -183,18 +240,25 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
 
         M.RandomMaze();
         game = new GameEx(M,0,0,5);
-        iv.setImageBitmap(M.DrawMaze());
+        iv.setImageBitmap(M.DrawMaze(sp.getInt("backgroundcolor",Color.BLACK),sp.getInt("playercolor",Color.GREEN),sp.getInt("finishcolor",Color.RED),sp.getInt("mazecolor",Color.GREEN)));
 
         curr = sp.getInt(""+game.getMaze().getsize(),100000000);
 
     }
-
     @Override
     public void onClick(View view) {
         if(!active){
             active = true;
             startTime = System.currentTimeMillis();
             timerHandler.postDelayed(timerRunnable, 10);
+        }
+        if(view ==restart){
+            Intent intent=new Intent(this,MazeGame.class);
+            intent.putExtra("size",game.getMaze().getsize());
+            startActivity(intent);
+        }
+        if(view == backbutton){
+            onBackPressed();
         }
         if(view == playagain){
 
@@ -262,7 +326,7 @@ public class MazeGame extends AppCompatActivity implements View.OnClickListener 
                     game.setScore(game.getScore() + 1);
                 }
             }
-            iv.setImageBitmap(game.getMaze().DrawMaze());
+            iv.setImageBitmap(M.DrawMaze(sp.getInt("backgroundcolor",Color.BLACK),sp.getInt("playercolor",Color.GREEN),sp.getInt("finishcolor",Color.RED),sp.getInt("mazecolor",Color.GREEN)));
         }
 
     }

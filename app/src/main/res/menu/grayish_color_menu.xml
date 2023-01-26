@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/black"
+        android:title="black"
+
+        />
+    <item
+        android:id="@+id/white"
+        android:title="white"
+
+        />
+    <item
+        android:id="@+id/darkgray"
+        android:title="dark gray"
+
+        />
+    <item
+        android:id="@+id/lightgray"
+        android:title="light gray"
+
+        />
 
 </menu>

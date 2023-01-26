@@ -11,6 +11,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -20,11 +21,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 
 public class RecList_activity extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,8 +57,22 @@ public class RecList_activity extends AppCompatActivity implements View.OnClickL
     DatabaseReference Ref10;
     FirebaseDatabase firebaseDatabase;
     MediaPlayer bpress;
-
+    MediaPlayer music;
+    ImageButton backbutton;
+    public void onPause() {
+        super.onPause();
+        music.pause();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Play again
+        music.start();
+        //do more stuff
+    }
+    private static Set<MediaPlayer> activePlayers;
     public void onBackPressed() {
+        music.stop();
         Intent intent=new Intent(this,MainActivity.class);
         startActivity(intent);
     }
@@ -78,11 +96,27 @@ public class RecList_activity extends AppCompatActivity implements View.OnClickL
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rec_list);
+        /*activePlayers = new HashSet<MediaPlayer>();
+        MediaPlayer.OnCompletionListener releaseOnFinishListener = new MediaPlayer.OnCompletionListener() {
+            public void onCompletion(MediaPlayer mp) {
+                mp.release();
+                activePlayers.remove(mp);
+            }
+        };*/
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        bpress = MediaPlayer.create(getApplicationContext(),R.raw.blop);
+
+
+        //bpress.setOnCompletionListener(releaseOnFinishListener);
 
         sp=getSharedPreferences("scores",0);
+        bpress = MediaPlayer.create(getApplicationContext(),R.raw.blop);
+        music = MediaPlayer.create(getApplicationContext(),R.raw.levelmenumusic);
+        music.setVolume((float)sp.getInt("musicvol",10)/10,(float)sp.getInt("musicvol",10)/10);
+        music.setLooping(true);
+        music.start();
+        backbutton = findViewById(R.id.backbutton);
+        backbutton.setOnClickListener(this);
         bt3 = findViewById(R.id.buttonR3);
         bt4 = findViewById(R.id.buttonR4);
         bt5 = findViewById(R.id.buttonR5);
@@ -132,26 +166,93 @@ public class RecList_activity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
+        if(view==backbutton){
+            onBackPressed();
+        }
         if(view == bt3){
+            bpress.stop();
+            try {
+                bpress.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            bpress.start();
         showRecords(Ref3);
         }
 
         if(view == bt4){
+            bpress.stop();
+            try {
+                bpress.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            bpress.start();
             showRecords(Ref4);
-            bpress.start();}
+            }
 
         if(view == bt5){
+            bpress.stop();
+            try {
+                bpress.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            bpress.start();
             showRecords(Ref5);
-            bpress.start();}
+            }
         if(view == bt6){
-            showRecords(Ref6);bpress.start();}
+            bpress.stop();
+            try {
+                bpress.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            bpress.start();
+            showRecords(Ref6);
+            }
         if(view == bt7){
-            showRecords(Ref7);bpress.start();}
+
+            bpress.stop();
+            try {
+                bpress.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            bpress.start();
+            showRecords(Ref7);
+            }
         if(view == bt8){
-            showRecords(Ref8);bpress.start();}
+
+            bpress.stop();
+            try {
+                bpress.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            bpress.start();
+            showRecords(Ref8);
+            }
         if(view == bt9){
-            showRecords(Ref9);bpress.start();}
+
+            bpress.stop();
+            try {
+                bpress.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            bpress.start();
+            showRecords(Ref9);
+            }
         if(view == bt10){
-            showRecords(Ref10);bpress.start();}
+            bpress.stop();
+            try {
+                bpress.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            bpress.start();
+            showRecords(Ref10);
+            }
     }
 }

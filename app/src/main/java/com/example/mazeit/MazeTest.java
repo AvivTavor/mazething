@@ -41,7 +41,7 @@ public class MazeTest extends AppCompatActivity implements View.OnClickListener 
         iv=  findViewById(R.id.iv);
         btn.setOnClickListener(this);
         M.RandomMaze();
-        iv.setImageBitmap(M.DrawMaze());
+        iv.setImageBitmap(M.DrawMaze(Color.BLACK,Color.GREEN,Color.RED,Color.GREEN));;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class MazeTest extends AppCompatActivity implements View.OnClickListener 
             if(M.solved()){
                 M.RandomMaze();
             }
-            iv.setImageBitmap(M.DrawMaze());
+            iv.setImageBitmap(M.DrawMaze(Color.BLACK,Color.GREEN,Color.RED,Color.GREEN));;
 
         }
         if(v==down){
@@ -59,7 +59,7 @@ public class MazeTest extends AppCompatActivity implements View.OnClickListener 
             if(M.solved()){
                 M.RandomMaze();
             }
-            iv.setImageBitmap(M.DrawMaze());
+            iv.setImageBitmap(M.DrawMaze(Color.BLACK,Color.GREEN,Color.RED,Color.GREEN));;
 
         }
         if(v==left){
@@ -67,20 +67,20 @@ public class MazeTest extends AppCompatActivity implements View.OnClickListener 
             if(M.solved()){
                 M.RandomMaze();
             }
-            iv.setImageBitmap(M.DrawMaze());
+            iv.setImageBitmap(M.DrawMaze(Color.BLACK,Color.GREEN,Color.RED,Color.GREEN));;
 
         }if(v==right){
             M.tryright();
             if(M.solved()){
                 M.RandomMaze();
             }
-            iv.setImageBitmap(M.DrawMaze());
+            iv.setImageBitmap(M.DrawMaze(Color.BLACK,Color.GREEN,Color.RED,Color.GREEN));;
 
         }
         if(v==btn){
             M = new Maze(Integer.parseInt(edt.getText().toString()));
             M.RandomMaze();
-            iv.setImageBitmap(M.DrawMaze());
+            iv.setImageBitmap(M.DrawMaze(Color.BLACK,Color.GREEN,Color.RED,Color.GREEN));;
         }
 
     }

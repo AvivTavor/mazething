@@ -1,10 +1,10 @@
 package com.example.mazeit;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -18,7 +18,7 @@ public class Maze {
     public int getsize(){
         return n;
     }
-    public Bitmap DrawMaze() {
+    public Bitmap DrawMaze(int BgColor,int StartColor, int EndColor, int MazeColor) {
         int k=900;
         Bitmap bitmap = Bitmap.createBitmap(k, k, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
@@ -27,10 +27,11 @@ public class Maze {
         Paint paintBg = new Paint();
         Paint stroke = new Paint();
         canvas.drawRect(0, 0, k, k, paintBg);
-        paintBg.setColor(Color.GRAY);
-        paintCircle.setColor(Color.GREEN);
-        paintCircleend.setColor(Color.RED);
-        stroke.setColor(Color.GREEN);
+        paintBg.setColor(BgColor);
+        paintCircle.setColor(StartColor);
+        paintCircleend.setColor(EndColor);
+        stroke.setColor(MazeColor);
+        canvas.drawColor(BgColor);
         paintCircle.setAntiAlias(true);
         stroke.setStrokeWidth(k/12/n);
         canvas.drawCircle(k/2 / n + k * location[0] / n, k/2 / n + k * location[1] / n, k/3 / n, paintCircle);

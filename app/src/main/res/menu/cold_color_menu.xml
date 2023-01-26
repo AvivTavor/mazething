@@ -6,8 +6,8 @@
 
     />
     <item
-        android:id="@+id/red"
-        android:title="red"
+        android:id="@+id/cyan"
+        android:title="cyan"
 
         />
     <item

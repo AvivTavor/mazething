@@ -13,8 +13,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="left"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="30dp"
+            android:text="Records"
+            android:layout_weight="90"
+            android:gravity="center"/>
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/backbutton"
+            android:id="@+id/backbutton"
+            android:layout_weight="10"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:weightSum="100"
-        android:gravity="center"
+        android:gravity="left"
         >
 
         <Button

@@ -2,35 +2,36 @@ package com.example.mazeit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.sql.Ref;
 import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
     public void onBackPressed() {
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Play again
+        mediaPlayer.start();
+        //do more stuff
+    }
+
     public boolean internetIsConnected() {
         try {
             String command = "ping -c 1 google.com";
@@ -83,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.mainmenu);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
-
         play = findViewById(R.id.finalmaze);
         recs = findViewById(R.id.online);
 
